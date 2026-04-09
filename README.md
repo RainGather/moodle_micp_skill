@@ -11,6 +11,10 @@ In plain language:
 - the Moodle plugin runs the activity in class
 - this repository helps an AI assistant create the lesson package for that activity
 
+The core promise is simple:
+
+**use AI to produce interactive HTML lesson packages at much lower cost, while still keeping them usable inside Moodle.**
+
 ## Who This Is For
 
 This repository is for teachers, course teams, or developers who want help generating interactive lesson packages.
@@ -22,6 +26,7 @@ It is useful when you want an AI assistant to help you create:
 - a visual interactive explanation
 - a practice activity with automatic scoring
 - a mixed activity with both auto-scored and teacher-reviewed parts
+- an interactive lab, simulation, or guided experiment
 
 ## What It Produces
 
@@ -76,6 +81,13 @@ Usually the work gets stuck in one of these places:
 This repository is meant to reduce that burden.
 
 Its goal is not "make fancy pages". Its goal is "help produce uploadable teaching activities that really work inside Moodle".
+
+That is the real pitch for teachers and course teams:
+
+- lower production cost
+- faster prototyping
+- more ambitious interactive activities
+- less technical glue work between idea and classroom use
 
 ## Basic Usage
 
