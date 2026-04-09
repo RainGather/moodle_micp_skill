@@ -1,15 +1,31 @@
-# MICP Authoring Skill
+# MICP Lesson Package Builder
 
 [**中文版**](./README_zh.md)
 
-> **The old way:** a teacher has an interactive teaching idea, then gets stuck turning it into HTML, packaging, event tracking, and grading rules.
-> **The MICP way:** the agent generates a full lesson package that is ready to upload into MICP.
+This repository is not the Moodle plugin itself.
 
-`MICP Authoring Skill` is a general AI-agent skill and authoring pack for generating complete lesson packages for the `mod_micp` Moodle activity module.
+It is a reusable AI authoring guide for making lesson packages that can be uploaded into MICP for Moodle.
 
-The workflow is not tied to a single tool vendor. It can be adapted for Codex, OpenCode, OpenClaw, Claude Code, and similar agentic tools that can follow repository instructions and generate files from structured references. `SKILL.md` is the packaged form in this repository, but the authoring method itself is tool-agnostic.
+In plain language:
 
-The skill focuses on one job: produce a deployable MICP lesson package with the files Moodle needs:
+- the Moodle plugin runs the activity in class
+- this repository helps an AI assistant create the lesson package for that activity
+
+## Who This Is For
+
+This repository is for teachers, course teams, or developers who want help generating interactive lesson packages.
+
+It is useful when you want an AI assistant to help you create:
+
+- a guided lesson page
+- a multi-step learning activity
+- a visual interactive explanation
+- a practice activity with automatic scoring
+- a mixed activity with both auto-scored and teacher-reviewed parts
+
+## What It Produces
+
+The target output is a lesson package like this:
 
 ```text
 output-dir/
@@ -19,26 +35,67 @@ output-dir/
     └── micp.js
 ```
 
-## Why Teachers And Course Teams Care
+That package can then be uploaded into the MICP Moodle plugin.
 
-Teachers often know the activity they want students to do. The real problem is converting that idea into something usable inside a course without becoming a front-end developer and assessment engineer.
+## How A Teacher Can Understand It
 
-This skill is meant to reduce that gap. It helps an AI agent generate lesson packages that are not just visually interactive, but operational for teaching:
+If you do not care about AI tooling details, the simplest way to think about this repository is:
 
-- structured enough to upload into `mod_micp`
-- instrumented enough to capture learner evidence
-- constrained enough to support reliable server-side scoring
-- flexible enough to support simulations, explorations, guided tasks, and reflective prompts
+1. Give these instructions to an AI assistant.
+2. Ask it to create a lesson on your teaching topic.
+3. The assistant generates a MICP lesson package.
+4. Upload that package into Moodle through the MICP plugin.
 
-The practical outcome is that a teacher or course team can move from "activity idea" to "uploadable lesson package" much faster, with less hand-built HTML and much less ambiguity around grading.
+So this repository is a "lesson package builder guide" for AI assistants.
 
-## The Core Loop
+## Is It Only For Codex
+
+No.
+
+The workflow is not tied to one vendor or one coding assistant. It can be adapted for:
+
+- Codex
+- OpenCode
+- OpenClaw
+- Claude Code
+- similar agent tools that can follow repository instructions and generate files
+
+`SKILL.md` is the packaged instruction format used in this repository, but the method itself is general.
+
+## Why It Matters In Teaching
+
+Many teachers can describe a strong interactive activity, but building it from scratch is slow.
+
+Usually the work gets stuck in one of these places:
+
+- writing the HTML
+- deciding how to capture student actions
+- deciding how to score the activity
+- packaging everything in a form Moodle can actually use
+
+This repository is meant to reduce that burden.
+
+Its goal is not "make fancy pages". Its goal is "help produce uploadable teaching activities that really work inside Moodle".
+
+## Basic Usage
+
+### Option 1. Use it with an AI assistant
+
+Give the repository or the `SKILL.md` instructions to your AI assistant and ask for a lesson package, for example:
 
 ```text
-Teaching idea -> agent generates MICP package -> upload to MICP -> students use it in Moodle
+Create a MICP lesson about photosynthesis for secondary school students.
 ```
 
-That is the promise of this repository: not generic HTML generation, but lesson-package generation that fits a real teaching workflow.
+The assistant should generate:
+
+- `index.html`
+- `micp-scoring.json`
+- any needed assets
+
+### Option 2. Reuse the templates manually
+
+If needed, developers can also reuse the templates, patterns, and assets directly.
 
 ## Repository Layout
 
@@ -52,53 +109,17 @@ That is the promise of this repository: not generic HTML generation, but lesson-
     └── quick-reference.md
 ```
 
-- `SKILL.md` is the canonical runtime instruction file in this repository
-- the same authoring workflow can be reused in other agent environments, even if they package instructions differently
-- `references/` contains templates, interaction patterns, and bundled runtime assets used when authoring lesson packages.
-- This README is repository-level documentation for version control and publication. It is not part of the skill loading contract.
+- `SKILL.md` is the main instruction file
+- `references/` contains templates, interaction patterns, and assets
+- this README is repository-level documentation for humans
 
-## What The Skill Covers
+## Relationship To The Moodle Plugin
 
-- MICP-compatible HTML lesson authoring
-- Progressive step interactions
-- Proper `window.MICP` SDK usage
-- Server-side scoring config generation
-- Packaging conventions for Moodle `mod_micp`
-- Guardrails for UI clarity, accessibility, and grading integrity
+This repository creates lesson packages.
 
-## Usage
+The Moodle plugin repository runs those packages inside Moodle, records learner activity, scores it, and reports it.
 
-Use this repository when you need an AI agent to create a MICP-compatible lesson package for Moodle.
-
-Depending on your environment, that may mean:
-
-- installing it as a skill in Codex-compatible tooling
-- adapting `SKILL.md` into another agent's instruction format
-- reusing the references and templates as a portable authoring pack
-
-Typical triggers include:
-
-- create an interactive HTML lesson for mod_micp
-- generate a MICP package
-- create a progressive disclosure lesson for Moodle
-- 制作 MICP 互动课件
-
-## Relationship To mod_micp
-
-This repository contains authoring guidance and bundled references for generating lesson packages.
-It is separate from the Moodle plugin repository itself, which is responsible for delivering, storing, and grading those packages inside Moodle.
-
-## Teaching Use Cases
-
-This skill is especially useful when teachers want to produce:
-
-- guided multi-step activities
-- interactive explanations with embedded checks
-- visual explorations followed by evidence capture
-- mixed auto-graded and manually reviewed tasks
-- reusable activity packages for a department or course team
-
-The main gain is not novelty for its own sake. The gain is reducing the cost of producing stronger interactive activities that still fit a real Moodle teaching workflow.
+The two repositories are related, but they do different jobs.
 
 ## License
 
