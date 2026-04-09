@@ -1,6 +1,10 @@
 # micp-html-authoring
 
-`micp-html-authoring` is a Codex skill for generating complete lesson packages for the `mod_micp` Moodle activity module.
+[**中文版**](./README_zh.md)
+
+`micp-html-authoring` is a general AI-agent skill and authoring pack for generating complete lesson packages for the `mod_micp` Moodle activity module.
+
+The workflow is not tied to a single tool vendor. It can be adapted for Codex, OpenCode, OpenClaw, Claude Code, and similar agentic tools that can follow repository instructions and generate files from structured references. `SKILL.md` is the canonical packaged form in this repository, but the authoring method itself is tool-agnostic.
 
 The skill focuses on one job: produce a deployable MICP lesson package with the files Moodle needs:
 
@@ -11,6 +15,19 @@ output-dir/
 └── assets/
     └── micp.js
 ```
+
+## Why Teachers And Course Teams Care
+
+Teachers often know the activity they want students to do, but turning that idea into a usable Moodle activity usually breaks down into front-end work, packaging work, scoring work, and quality-control work.
+
+This skill is meant to reduce that gap. It helps an AI agent generate lesson packages that are not just visually interactive, but operational for teaching:
+
+- structured enough to upload into `mod_micp`
+- instrumented enough to capture learner evidence
+- constrained enough to support reliable server-side scoring
+- flexible enough to support simulations, explorations, guided tasks, and reflective prompts
+
+The practical outcome is that a teacher or course team can move from "activity idea" to "uploadable lesson package" much faster, with less hand-built HTML and less ambiguity around grading.
 
 ## Repository Layout
 
@@ -25,6 +42,7 @@ output-dir/
 ```
 
 - `SKILL.md` is the canonical runtime instruction file consumed by Codex.
+- the same authoring workflow can be reused in other agent environments, even if they package instructions differently
 - `references/` contains templates, interaction patterns, and bundled runtime assets used when authoring lesson packages.
 - This README is repository-level documentation for version control and publication. It is not part of the skill loading contract.
 
@@ -39,7 +57,13 @@ output-dir/
 
 ## Usage
 
-Install or copy this skill into a Codex skills directory, then invoke it when you need to create a MICP-compatible lesson package for Moodle.
+Use this repository when you need an AI agent to create a MICP-compatible lesson package for Moodle.
+
+Depending on your environment, that may mean:
+
+- installing it as a skill in Codex-compatible tooling
+- adapting `SKILL.md` into another agent's instruction format
+- reusing the references and templates as a portable authoring pack
 
 Typical triggers include:
 
@@ -52,6 +76,18 @@ Typical triggers include:
 
 This repository contains authoring guidance and bundled references for generating lesson packages.
 It is separate from the Moodle plugin repository itself, which is responsible for delivering, storing, and grading those packages inside Moodle.
+
+## Teaching Use Cases
+
+This skill is especially useful when teachers want to produce:
+
+- guided multi-step activities
+- interactive explanations with embedded checks
+- visual explorations followed by evidence capture
+- mixed auto-graded and manually reviewed tasks
+- reusable activity packages for a department or course team
+
+The main gain is not novelty for its own sake. The gain is reducing the cost of producing higher-quality interactive activities that still fit a real Moodle teaching workflow.
 
 ## License
 
