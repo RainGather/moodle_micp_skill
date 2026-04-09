@@ -1,10 +1,13 @@
-# micp-html-authoring
+# MICP Authoring Skill
 
 [**中文版**](./README_zh.md)
 
-`micp-html-authoring` is a general AI-agent skill and authoring pack for generating complete lesson packages for the `mod_micp` Moodle activity module.
+> **The old way:** a teacher has an interactive teaching idea, then gets stuck turning it into HTML, packaging, event tracking, and grading rules.
+> **The MICP way:** the agent generates a full lesson package that is ready to upload into MICP.
 
-The workflow is not tied to a single tool vendor. It can be adapted for Codex, OpenCode, OpenClaw, Claude Code, and similar agentic tools that can follow repository instructions and generate files from structured references. `SKILL.md` is the canonical packaged form in this repository, but the authoring method itself is tool-agnostic.
+`MICP Authoring Skill` is a general AI-agent skill and authoring pack for generating complete lesson packages for the `mod_micp` Moodle activity module.
+
+The workflow is not tied to a single tool vendor. It can be adapted for Codex, OpenCode, OpenClaw, Claude Code, and similar agentic tools that can follow repository instructions and generate files from structured references. `SKILL.md` is the packaged form in this repository, but the authoring method itself is tool-agnostic.
 
 The skill focuses on one job: produce a deployable MICP lesson package with the files Moodle needs:
 
@@ -18,7 +21,7 @@ output-dir/
 
 ## Why Teachers And Course Teams Care
 
-Teachers often know the activity they want students to do, but turning that idea into a usable Moodle activity usually breaks down into front-end work, packaging work, scoring work, and quality-control work.
+Teachers often know the activity they want students to do. The real problem is converting that idea into something usable inside a course without becoming a front-end developer and assessment engineer.
 
 This skill is meant to reduce that gap. It helps an AI agent generate lesson packages that are not just visually interactive, but operational for teaching:
 
@@ -27,7 +30,15 @@ This skill is meant to reduce that gap. It helps an AI agent generate lesson pac
 - constrained enough to support reliable server-side scoring
 - flexible enough to support simulations, explorations, guided tasks, and reflective prompts
 
-The practical outcome is that a teacher or course team can move from "activity idea" to "uploadable lesson package" much faster, with less hand-built HTML and less ambiguity around grading.
+The practical outcome is that a teacher or course team can move from "activity idea" to "uploadable lesson package" much faster, with less hand-built HTML and much less ambiguity around grading.
+
+## The Core Loop
+
+```text
+Teaching idea -> agent generates MICP package -> upload to MICP -> students use it in Moodle
+```
+
+That is the promise of this repository: not generic HTML generation, but lesson-package generation that fits a real teaching workflow.
 
 ## Repository Layout
 
@@ -41,7 +52,7 @@ The practical outcome is that a teacher or course team can move from "activity i
     └── quick-reference.md
 ```
 
-- `SKILL.md` is the canonical runtime instruction file consumed by Codex.
+- `SKILL.md` is the canonical runtime instruction file in this repository
 - the same authoring workflow can be reused in other agent environments, even if they package instructions differently
 - `references/` contains templates, interaction patterns, and bundled runtime assets used when authoring lesson packages.
 - This README is repository-level documentation for version control and publication. It is not part of the skill loading contract.
@@ -87,7 +98,7 @@ This skill is especially useful when teachers want to produce:
 - mixed auto-graded and manually reviewed tasks
 - reusable activity packages for a department or course team
 
-The main gain is not novelty for its own sake. The gain is reducing the cost of producing higher-quality interactive activities that still fit a real Moodle teaching workflow.
+The main gain is not novelty for its own sake. The gain is reducing the cost of producing stronger interactive activities that still fit a real Moodle teaching workflow.
 
 ## License
 
