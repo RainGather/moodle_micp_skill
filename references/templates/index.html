@@ -144,14 +144,12 @@
       </aside>
     </section>
 
-    <!-- LESSON BODY: Each step should present one clear primary learner action and progressive disclosure. -->
-    {{STEPS_CONTENT}}
-
-    <!-- STICKY PROGRESS PANEL: Keep this supportive and lightweight so it does not compete with the lesson task. -->
     <div class="layout">
       <section class="steps" aria-label="Interactive lesson steps">
-        <!-- Step sections go here -->
+        <!-- LESSON BODY: Each step should present one clear primary learner action and progressive disclosure. -->
+        {{STEPS_CONTENT}}
       </section>
+      <!-- STICKY PROGRESS PANEL: Keep this supportive and lightweight so it does not compete with the lesson task. -->
       <aside class="sticky-panel" aria-label="Progress and submission panel">
         <div>
           <span class="badge">{{PROGRESS_LABEL}}</span>

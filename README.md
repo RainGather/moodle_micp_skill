@@ -133,6 +133,8 @@ The Moodle plugin repository runs those packages inside Moodle, records learner 
 
 The two repositories are related, but they do different jobs.
 
+The bundled `references/assets/micp.js` runtime should be kept aligned with the plugin repository's `micp.js` implementation so generated lesson packages match the current bridge contract.
+
 ## License
 
 GPL v3 or later. See [LICENSE](./LICENSE).

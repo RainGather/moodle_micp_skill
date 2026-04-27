@@ -28,7 +28,7 @@ If you nest the lesson, keep **all referenced assets relative to that nested `in
 |---|---|---|
 | Exact match | `"correct": "B"` | `response: "B"` |
 | Non-empty | `"requireNonEmpty": true` | `response: "any text"` |
-| Completed | `"completed": true` | `response: "revealed"` |
+| Completed | `"completed": true` | `response: "done", completed: true` |
 | Presence only | `{}` (empty) | any non-null response |
 | Manual review | `"gradingmode": "manual"` | `response: "free response"` |
 
@@ -49,6 +49,7 @@ window.MICP.sendEvent('interaction', {
   interactionid: 'my_id',
   response: 'user_response_value',
   outcome: 'selected|adjusted|completed|saved|submitted',
+  completed: true, // include when using "completed" scoring
   sequence: actions.length + 1,
   // ... any extra fields
 });

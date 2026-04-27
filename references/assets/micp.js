@@ -1,3 +1,18 @@
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 (function() {
     var MESSAGE_NAMESPACE = 'mod_micp';
     var MESSAGE_TYPES = {
@@ -5,6 +20,7 @@
         CONTEXT: 'context',
         EVENT: 'event',
         SUBMIT: 'submit',
+        RESIZE: 'resize',
         SUBMIT_RESULT: 'submit_result',
         SUBMIT_ERROR: 'submit_error'
     };
@@ -15,7 +31,9 @@
         messageQueue: [],
         parentWindow: null,
         targetOrigin: null,
-        listenerAttached: false
+        listenerAttached: false,
+        resizeObserver: null,
+        pendingHeightFrame: null
     };
 
     function isPlainObject(value) {
@@ -69,6 +87,53 @@
         });
     }
 
+    function measureHeight() {
+        var body = document.body;
+        var doc = document.documentElement;
+
+        return Math.max(
+            body ? body.scrollHeight : 0,
+            body ? body.offsetHeight : 0,
+            doc ? doc.clientHeight : 0,
+            doc ? doc.scrollHeight : 0,
+            doc ? doc.offsetHeight : 0
+        );
+    }
+
+    function reportHeight() {
+        postMessage(buildMessage(MESSAGE_TYPES.RESIZE, {
+            height: measureHeight()
+        }));
+    }
+
+    function scheduleHeightReport() {
+        if (state.pendingHeightFrame !== null) {
+            window.cancelAnimationFrame(state.pendingHeightFrame);
+        }
+
+        state.pendingHeightFrame = window.requestAnimationFrame(function() {
+            state.pendingHeightFrame = null;
+            reportHeight();
+        });
+    }
+
+    function ensureResizeObserver() {
+        if (state.resizeObserver || typeof ResizeObserver === 'undefined') {
+            return;
+        }
+
+        state.resizeObserver = new ResizeObserver(function() {
+            scheduleHeightReport();
+        });
+
+        if (document.body) {
+            state.resizeObserver.observe(document.body);
+        }
+        if (document.documentElement) {
+            state.resizeObserver.observe(document.documentElement);
+        }
+    }
+
     function receiveMessage(event) {
         var data = event ? event.data : null;
 
@@ -95,6 +160,7 @@
         }
 
         state.context = cloneValue(data.payload.context || {});
+        scheduleHeightReport();
     }
 
     function ensureListener() {
@@ -120,6 +186,8 @@
                 requestedContext: true
             }));
             flushQueue();
+            ensureResizeObserver();
+            scheduleHeightReport();
 
             return this.getContext();
         },
@@ -153,4 +221,8 @@
             return cloneValue(state.context || {});
         }
     };
+
+    window.addEventListener('load', scheduleHeightReport, false);
+    window.addEventListener('resize', scheduleHeightReport, false);
+    window.addEventListener('micp:submit-success', scheduleHeightReport, false);
 })();

@@ -86,6 +86,7 @@ window.MICP.sendEvent('interaction', {
   interactionid: 'your_stable_id',   // must match micp-scoring.json
   response: 'user_response_value',    // what the learner did/chose/typed
   outcome: 'selected|adjusted|completed|saved|submitted',
+  completed: true,                    // include when using completion-style scoring
   sequence: actions.length + 1,
 });
 
@@ -105,7 +106,7 @@ Every `interactionid` in `micp-scoring.json` **must** appear in `index.html` pay
 ```json
 { "scoring": { "correct": "B" } }           // exact match
 { "scoring": { "requireNonEmpty": true } }  // any non-blank text
-{ "scoring": { "completed": true } }        // presence counts
+{ "scoring": { "completed": true } }        // payload must include completed: true
 { "scoring": {} }                            // pure presence (no rules)
 { "gradingmode": "manual", "scoring": { "requireNonEmpty": true } } // subjective/manual-review item
 ```
@@ -246,7 +247,7 @@ Use these bundled references when generating:
 |---|---|
 | `references/templates/index.html` | Full visual template with CSS framework |
 | `references/templates/micp-scoring.json` | Scoring config template |
-| `references/assets/micp.js` | MICP JavaScript runtime (copy to `assets/`) |
+| `references/assets/micp.js` | MICP JavaScript runtime (copy to `assets/`; keep aligned with `../micp/micp.js`) |
 | `references/patterns/progressive-step.html` | Step HTML structure |
 | `references/patterns/multiple-choice.html` | Choice button pattern |
 | `references/patterns/canvas-waveform.html` | Animated waveform canvas |
