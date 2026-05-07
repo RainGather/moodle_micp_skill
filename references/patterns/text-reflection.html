@@ -1,10 +1,12 @@
 /* ================================================================
    PATTERN: Text Reflection / Free Response
    ================================================================
-   Textarea for open-ended learner response, typically used for subjective/manual review or non-empty completion checks.
+   Textarea for a short learner response.
    Design note: prompts should feel calm and specific; the save action should be the clear primary control.
 
-   GRADING: Use "requireNonEmpty": true for simple completion, or pair the interaction with `gradingmode: "manual"` when a teacher should review the content.
+   DEFAULT GRADING: Prefer constrained short responses that can still be auto-scored after submission.
+   Use `requireNonEmpty` only for completion-style credit.
+   Use `gradingmode: "manual"` only when the user explicitly wants teacher review.
 
    recordAction fires on save button click, not on every keystroke.
    Provide visible saved/empty/error feedback near the textarea, but do not show correctness feedback.
@@ -14,6 +16,7 @@
 <div class="info-card">
   <h3>{{REFLECTION_TITLE}}</h3>
   <p>{{REFLECTION_PROMPT}}</p>
+  <p class="helper-text">Keep the answer short and specific so it can be checked clearly.</p>
   <label for="reflection-text" class="visually-hidden">{{ARIA_LABEL}}</label>
   <textarea id="reflection-text"
     placeholder="{{PLACEHOLDER_TEXT}}"></textarea>

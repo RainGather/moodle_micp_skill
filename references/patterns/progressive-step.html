@@ -8,34 +8,34 @@
    STRUCTURE:
    <section class="step unlocked" id="step-N" data-step="N">
      <div class="step-head">
-       <div>
-         <div class="step-index">Step N</div>
-         <h2>Step Title</h2>
-       </div>
-       <div class="status-pill" id="status-step-N">Ready</div>
-     </div>
-     <div class="step-grid">
+        <div>
+          <div class="step-index">Step N</div>
+          <h2>Step Title</h2>
+        </div>
+        <div class="status-pill" id="status-step-N">Ready</div>
+      </div>
+      <div class="step-body">
         <div class="viz-card">
-          <!-- Visualization: canvas, SVG, or interactive element that explains the current concept -->
+          <!-- Visualization: canvas, SVG, or worked example that explains the current concept -->
         </div>
         <div class="info-card">
-          <h3>Checkpoint</h3>
-          <p>Short, concrete instruction for the learner. Keep copy scannable.</p>
-         <div class="option-grid" id="interaction-options">
-           <button type="button" class="option-button"
-             data-group="interaction_group"
+          <h3>What to do</h3>
+          <p>Short, concrete instruction for the learner. Keep copy scannable and middle-school-friendly.</p>
+          <div class="option-grid" id="interaction-options">
+            <button type="button" class="option-button"
+              data-group="interaction_group"
              data-id="{{INTERACTION_ID}}"
              data-response="{{RESPONSE_VALUE}}">
              <strong>Option label</strong>
              Option description.
            </button>
-         </div>
-         <div class="feedback" id="interaction-feedback"></div>
-       </div>
-     </div>
-   </section>
+          </div>
+          <div class="feedback" id="interaction-feedback"></div>
+        </div>
+      </div>
+    </section>
 
-    GRADED: Set gradedInteractions[interactionid] = true in JS setup.
-    UNGRADED EXPLORATION: Use a non-graded button with different interactionid.
-    Keep focus states visible and avoid adding decorative motion that delays the next step.
-   ================================================================ */
+     DEFAULT: Each main step should be score-bearing.
+     EXPLORATION: Only use non-graded actions when the user explicitly asked for them.
+     Keep focus states visible and avoid decorative motion that delays the next step.
+    ================================================================ */

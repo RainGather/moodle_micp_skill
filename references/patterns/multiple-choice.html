@@ -9,8 +9,9 @@
 
    JS: Record the selection and acknowledge it neutrally.
 
-   GRADED: may still use a "correct" rule in micp-scoring.json, but the UI should not reveal correctness immediately by default.
-   UNGRADED: change interactionid or omit from scoring config.
+   DEFAULT: use a clear correct answer in micp-scoring.json.
+   The UI should not reveal correctness immediately by default.
+   Avoid filler options that look decorative but do not support the question.
    ================================================================ */
 
 /* HTML structure:
@@ -37,4 +38,5 @@ CSS (already in template):
 .feedback { min-height: 1.5rem; color: var(--color-muted); }
 
 Keep one selection path visually primary and avoid extra buttons that compete with the question. Prefer feedback such as “Answer recorded” or “Selection saved”.
+Each question should make it obvious what the learner is deciding and why the options differ.
 */

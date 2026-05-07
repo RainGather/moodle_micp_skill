@@ -29,6 +29,20 @@ If the user only asks for one, remind them both are needed and produce both anyw
 
 Visual polish is important, but it is always secondary to the MICP contract. Modern styling must **never** interfere with MICP SDK integration, postMessage flows, step progression, accessibility, response capture, or server-side grading.
 
+## Default Layout Rule
+
+**Default to a single-column lesson flow.**
+
+Unless the user explicitly asks for a side-by-side comparison, the lesson should read from top to bottom in one clear vertical sequence:
+
+- short orientation
+- one step at a time
+- one main action per step
+- simple local feedback
+- one final submit area near the bottom
+
+Do **not** default to left-right teaching layouts, sticky sidebars, debug panels, or dashboard-style screens. Those patterns make the lesson harder to follow for typical school learners.
+
 ## No Meta Language Rule
 
 **Do not put meta statements into learner-facing HTML.** The generated page must speak in the voice of the lesson itself, not in the voice of an author, tool, assistant, or wrapper around the lesson.
@@ -122,7 +136,60 @@ Default behavior:
 
 This is especially important for choice interactions. A generated lesson must not make brute-force clicking the fastest path to the answer.
 
-For subjective responses, prefer `gradingmode: "manual"` so the lesson captures evidence for later teacher review instead of pretending it can auto-grade nuanced free text.
+After submission, the learner-facing page should show a **simple and human-readable result state** such as:
+
+- submitted successfully
+- current score or completion result when available
+- whether anything still needs teacher review
+
+Do **not** show raw JSON, internal IDs, action logs, or developer/debug output in the learner interface.
+
+## Scoring Coverage Rule
+
+**Default to lessons where every core task can contribute to the score.**
+
+Avoid generating lessons where most of the page is only exploratory and the learner can complete many actions without earning meaningful credit.
+
+By default:
+
+- each main step should have a score-bearing interaction
+- every score-bearing interaction should have a clear rule in `micp-scoring.json`
+- the learner should be able to finish the activity and receive a meaningful score after submission
+
+Only generate pure exploration segments when the user explicitly asks for them, and even then they should support a later score-bearing task.
+
+## Open Response Rule
+
+If the user does **not** explicitly require teacher review, prefer **auto-scoreable constrained responses** over fully open-ended answers.
+
+Good defaults:
+
+- short-answer with exact match or accepted variants
+- fill-in-the-blank
+- choose-and-explain with a scoreable choice plus a saved short reason
+- structured response with limited expected vocabulary
+
+Avoid defaulting to `gradingmode: "manual"` for ordinary school activities. Use manual review only when the user clearly wants teacher judgement.
+
+If a response is text-based and should still score automatically, design the prompt so the expected answer is narrow enough to be judged reliably.
+
+## Middle School Language Rule
+
+When the user does not specify another audience, write for a **middle school learner** by default.
+
+That means:
+
+- short sentences
+- explicit next-step instructions
+- concrete verbs such as **look**, **choose**, **write**, **compare**, **check**, **submit**
+- minimal jargon
+- calm, encouraging feedback
+
+Each step should make these obvious:
+
+1. What the learner is looking at
+2. What the learner should do now
+3. What counts as a finished response for this step
 
 ## Output Structure Per Lesson Type
 
@@ -140,13 +207,13 @@ Sequential steps that unlock one-by-one. Steps unlock when the required interact
     </div>
     <div class="status-pill" id="status-step-1">Ready</div>
   </div>
-  <div class="step-grid">
+  <div class="step-body">
     <div class="viz-card">
-      <!-- Canvas or SVG visualization -->
+      <!-- Canvas, SVG, diagram, or short worked example -->
     </div>
     <div class="info-card">
-      <h3>Checkpoint</h3>
-      <!-- Interaction: choice buttons, slider, text, etc. -->
+      <h3>What to do</h3>
+      <p>Short, concrete instruction in middle-school-friendly language.</p>
       <div class="option-grid" id="q1-options">
         <button type="button" class="option-button"
           data-group="q1" data-id="q1_choice" data-response="a">
@@ -184,13 +251,13 @@ var latestByInteraction = {};
 
 All questions visible at once, submit at end. No progressive unlocking.
 
-### 3. Exploration Lab
+### 3. Guided Practice With Visualization
 
-Non-graded sliders/canvases for free exploration + one final graded reflection text.
+Show a diagram, animation, or simulation, then ask a clearly scoreable question about it.
 
-### 4. Visualization + Choice
+### 4. Structured Short Answer
 
-Show a canvas animation, then ask a single-choice question about it.
+Use a narrow text response that can still be auto-scored after submission.
 
 ## Workflow
 
@@ -217,6 +284,7 @@ When generating lesson UI:
 
 - Prefer **one primary action per step or screen**. Secondary actions should be visually quieter.
 - Use **progressive disclosure** so each step reveals only the amount of information needed for the current learning task.
+- Default to **single-column reading flow**. Put explanation, task, response area, and feedback in the same vertical sequence.
 - Use **semantic tokens** for color, spacing, radius, shadow, and motion. Avoid one-off hard-coded styling unless it clearly matches the template system.
 - Use **SVG icons or topic visuals**, not emoji as structural UI.
 - Keep motion subtle: short transitions, hover/focus feedback, and state changes that help orientation. Respect `prefers-reduced-motion` when adding custom animation.
@@ -224,6 +292,8 @@ When generating lesson UI:
 - Keep visuals purposeful. Charts, diagrams, and hero visuals should explain the concept, not just decorate the page.
 - Maintain a consistent visual rhythm: strong heading hierarchy, concise copy blocks, generous spacing, and repeatable card patterns.
 - Default learner feedback to neutral capture/progress language, not correctness revelation.
+- Use language a typical middle school learner can follow on the first read.
+- End with one clean submit area. Do not expose internal debug information.
 
 ## Anti-Patterns to Avoid
 
@@ -235,9 +305,13 @@ Do **not** generate any of these unless the user explicitly asks for them and th
 - Decorative animation, parallax, autoplay motion, or flashy transitions that distract from the task
 - Emoji-driven UI in place of proper labels, icons, or diagrams
 - Dense dashboards that bury the learning interaction under metrics or status widgets
+- Default left-right split lesson layouts where the learner has to decide which column matters
+- Sticky sidebars that compete with the lesson itself
+- Raw JSON logs, developer panels, or debug output in the learner UI
 - Styling changes that obscure interaction IDs, feedback states, or submit behavior
 - Immediate correct/incorrect feedback that lets students brute-force the answer
 - Correct/incorrect colors, badges, or messages shown before final submission or teacher review by default
+- Large exploratory sections that do not contribute to a meaningful score unless the user explicitly asked for exploration
 
 ## Bundle Resources
 
@@ -265,8 +339,9 @@ Before finishing, verify ALL of these:
 - [ ] Every `interactionid` in `micp-scoring.json` appears in HTML exactly as spelled
 - [ ] `window.MICP.submit({ raw: { actions: actions } })` fires on submit button click
 - [ ] Submit button has `id="submit-attempt"`
-- [ ] Progress list `<ol id="progress-list">` exists with steps
-- [ ] `actionLog` pre element with `id="action-log"` exists
+- [ ] Layout is single-column by default unless the user explicitly requested side-by-side comparison
+- [ ] Submit area is simple, learner-friendly, and near the end of the main flow
+- [ ] No raw JSON, action log, or developer/debug output appears in the learner UI
 - [ ] No `score`, `rawgrade`, or grade fields in submit payload
 - [ ] `assets/micp.js` copied to output directory
 - [ ] CSS uses the CSS variable system from the template (or no custom CSS conflicts)
@@ -281,25 +356,27 @@ Before finishing, verify ALL of these:
 - [ ] If the package is nested, `index.html` and `assets/` still line up via relative paths
 - [ ] Language attribute set correctly (`lang="en"` or `lang="zh"`)
 - [ ] No immediate right/wrong learner feedback unless explicitly requested by the user
-- [ ] Subjective prompts use `gradingmode: "manual"` when teacher review is appropriate
+- [ ] Core steps contribute to a meaningful score instead of acting as scoreless filler
+- [ ] Text-response items are auto-scoreable by default unless the user explicitly asked for teacher review
+- [ ] Step instructions are readable for a middle school learner and make the next action obvious
 
 ## Styling System
 
-The template uses a dark space-inspired design system. Key CSS variables:
+The template uses a calm, classroom-friendly design system. Key CSS variables:
 
 ```css
---color-ink: #ebf5ff;           /* primary text */
---color-muted: #9cb7cf;         /* secondary text */
---color-panel: rgba(9,17,40,0.84); /* card backgrounds */
---color-accent: #8feaff;         /* primary accent */
---color-accent-strong: #4fc3ff;  /* hover/active accent */
---color-secondary: #ffbf69;       /* step index, secondary accent */
---color-success: #7fffd4;         /* correct state */
---color-danger: #ff8f8f;         /* wrong state */
---bg-page: /* dark gradient background */
+--color-ink: #17324a;           /* primary text */
+--color-muted: #526579;         /* secondary text */
+--color-panel: #ffffff;         /* card backgrounds */
+--color-accent: #2f80ed;        /* primary accent */
+--color-accent-soft: #e8f2ff;   /* selected / highlight state */
+--color-secondary: #f2a65a;     /* step index, secondary accent */
+--color-success: #1f9d74;       /* success state */
+--color-danger: #c94b4b;        /* error state */
+--bg-page: /* light background */
 ```
 
-Use these classes: `.panel`, `.step`, `.viz-card`, `.info-card`, `.control-card`, `.option-button`, `.primary`, `.secondary`, `.feedback`, `.status-box`, `.sticky-panel`.
+Use these classes: `.panel`, `.step`, `.step-body`, `.viz-card`, `.info-card`, `.control-card`, `.option-button`, `.primary`, `.secondary`, `.feedback`, `.status-box`, `.submit-panel`.
 
 Use the template as a **lightweight design system**, not just a CSS dump:
 
@@ -309,6 +386,7 @@ Use the template as a **lightweight design system**, not just a CSS dump:
 - Prefer concise copy blocks and scannable cards over long paragraphs.
 - Browser layouts should work comfortably across small mobile widths, tablet widths, and large desktop widths.
 - If you customize the visual theme, preserve the same level of contrast, focus visibility, and state clarity.
+- Favor calm, classroom-like presentation over cinematic or promotional styling.
 
 ## Language
 

@@ -1,11 +1,11 @@
 /* ================================================================
    PATTERN: Slider Interaction
    ================================================================
-   Range slider that records exploration events without grading.
-   Use for: adjusting parameters, seeing effects, non-graded exploration.
+   Range slider that adjusts a value and records the learner's final decision.
+   Use for: comparing outcomes, choosing a best-fit value, or preparing a later scoreable answer.
 
    recordAction is called on 'change' (not 'input') to avoid spam.
-   For graded sliders: record the final value as 'response'.
+   Default: record the final value as 'response' and connect it to a scoreable task.
    ================================================================ */
 
 /* HTML:
@@ -25,7 +25,7 @@ mySlider.addEventListener('input', function() {
 });
 
 mySlider.addEventListener('change', function() {
-  recordAction(makeAction('my_slider_explore', mySlider.value, 'adjusted', {
+  recordAction(makeAction('my_slider_value', mySlider.value, 'adjusted', {
     control: 'my-slider'
   }));
 });
